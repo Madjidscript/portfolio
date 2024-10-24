@@ -8,6 +8,8 @@ from flask_migrate import Migrate
 from config.constant import *
 from flask_cors import CORS
 from ressources.admin import *
+from ressources.contact import *
+from ressources.projet import *
 
 from flask import send_from_directory
 
@@ -56,9 +58,13 @@ def uploads(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
+api.add_resource(ContactApi, '/api/contact/<string:route>', endpoint='all_contact',  methods=['GET', 'POST', 'DELETE', 'PATCH'])
+
 api.add_resource(AdminApi, '/api/admin/<string:route>', endpoint='all_admin',  methods=['GET', 'POST', 'DELETE', 'PATCH'])
 api.add_resource(AdminApi, '/api/admin/<string:route>/<string:article_id>', endpoint='get_single_admin', methods=['GET'])
 
+api.add_resource(ProjetApi, '/api/projet/<string:route>', endpoint='all_projet',  methods=['GET', 'POST', 'DELETE', 'PATCH'])
+api.add_resource(ProjetApi, '/api/projet/<string:route>/<string:article_id>', endpoint='get_single_projet', methods=['GET'])
 
 
 if __name__ == '__main__':

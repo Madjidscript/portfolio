@@ -3,7 +3,7 @@ from dotenv import load_dotenv # type: ignore
 import os
 from flask import current_app
 
-def send_mail(nom, email):
+def send_mail1(nom, email):
     msg = Message(f"bonjour {nom}", 
                 sender= os.getenv("MAIL_USERNAME"),
                   recipients=[email])
