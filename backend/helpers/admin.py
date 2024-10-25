@@ -6,6 +6,8 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token, ge
 import bcrypt
 from dotenv import load_dotenv  # type: ignore
 import os
+from datetime import timedelta
+
 
 
 
@@ -204,7 +206,9 @@ def LoginAdmin() :
           }
 
           if admin and bcrypt.checkpw(password.encode("utf8"),admin.password.encode("utf8")) or (email == os.getenv("MAIL_USERNAME") and password == os.getenv("PASSWORD")):
-             
+               expires = timedelta(hours=1)
+               access_token = create_access_token(identity=email)
+               response["acces_token"]=access_token
                response["statut"]="succes"
                response["info"]=admin_info
                return response
