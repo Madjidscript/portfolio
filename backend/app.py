@@ -10,6 +10,7 @@ from flask_cors import CORS
 from ressources.admin import *
 from ressources.contact import *
 from ressources.projet import *
+from ressources.certif import *
 
 from flask import send_from_directory
 
@@ -23,7 +24,7 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
-app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(),'static','uploads')
 
 app.config['JWT_SECRET_KEY'] = 'super-secret'
 jwt = JWTManager(app)
@@ -64,7 +65,10 @@ api.add_resource(AdminApi, '/api/admin/<string:route>', endpoint='all_admin',  m
 api.add_resource(AdminApi, '/api/admin/<string:route>/<string:article_id>', endpoint='get_single_admin', methods=['GET'])
 
 api.add_resource(ProjetApi, '/api/projet/<string:route>', endpoint='all_projet',  methods=['GET', 'POST', 'DELETE', 'PATCH'])
-api.add_resource(ProjetApi, '/api/projet/<string:route>/<string:article_id>', endpoint='get_single_projet', methods=['GET'])
+api.add_resource(ProjetApi, '/api/projet/<string:route>/<string:projet_id>', endpoint='get_single_projet', methods=['GET'])
+
+api.add_resource(CertiftApi, '/api/certif/<string:route>', endpoint='all_certif',  methods=['GET', 'POST', 'DELETE', 'PATCH'])
+api.add_resource(CertiftApi, '/api/certif/<string:route>/<string:certif_id>', endpoint='get_single_certif', methods=['GET'])
 
 
 if __name__ == '__main__':

@@ -23,7 +23,7 @@ class Contact(db.Model):
     name = db.Column(db.String(80), nullable=False)  # Nom de l'article
     email = db.Column(db.String(128), nullable=False)  # Email
     whatsapp = db.Column(db.String(120), nullable=False)  # Prix de l'article
-    message = db.Column(db.String(120), nullable=False)  # Prix de l'article
+    message = db.Column(db.Text, nullable=False)  # Prix de l'article
 
 
 class Projet(db.Model):
@@ -31,6 +31,15 @@ class Projet(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Clé primaire
     projet_id = db.Column(db.String(128), unique=True, default=lambda: str(uuid.uuid4()))  # Identifiant unique
     name = db.Column(db.String(80), nullable=False)  # Prénom
-    description = db.Column(db.String(120), nullable=False)  # Nom de famille
+    description = db.Column(db.Text, nullable=False)  # Nom de famille
     lien = db.Column(db.String(120), nullable=False)  # Nom de famille
+    image_filename = db.Column(db.String(200), nullable=True)  # Nom du fichier image
+
+
+class Certif(db.Model):
+    __tablename__ = 'certif'
+    id = db.Column(db.Integer, primary_key=True)  # Clé primaire
+    certif_id = db.Column(db.String(128), unique=True, default=lambda: str(uuid.uuid4()))  # Identifiant unique
+    name = db.Column(db.String(80), nullable=False)  # Prénom
+    description = db.Column(db.Text, nullable=False)  # Nom de famille
     image_filename = db.Column(db.String(200), nullable=True)  # Nom du fichier image

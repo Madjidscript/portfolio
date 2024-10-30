@@ -6,19 +6,16 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token, ge
 import bcrypt
 
 
-def CreatProjet():
+def CreatCertif():
     response={}
     try :
         name= request.form.get("name")
         description =request.form.get("description")
-        lien =request.form.get("lien")
         image_filename =request.form.get("image_filename")
-        print("mes element",name,"ssss",description,lien)
 
-        new_projet = Projet()
-        new_projet.name=name
-        new_projet.description=description
-        new_projet.lien=lien
+        new_certif = Certif()
+        new_certif.name=name
+        new_certif.description=description
         if 'image_filename' in request.files:
             image_file = request.files['image_filename']
             print("mon image depuis",image_file)
@@ -30,70 +27,62 @@ def CreatProjet():
             
             # Enregistrer l'image
             image_filename = save_image(image_file)
-            new_projet.image_filename = image_filename 
+            new_certif.image_filename = image_filename 
 
-        db.session.add(new_projet)
+        db.session.add(new_certif)
         db.session.commit()
-        projet_info ={
-            "name":new_projet.name,
-            "description":new_projet.description,
-            "lien":new_projet.lien,
-            "image_filename":new_projet.image_filename
+        certif_info ={
+            "name":new_certif.name,
+            "description":new_certif.description,
+            "image_filename":new_certif.image_filename
         }
         response["statut"]="succes"
-        response["info"]=projet_info
+        response["info"]=certif_info
         return response
     except Exception as e :
         response["statut"]="error"
         response["errorDescript"]=str(e)
     return response
 
-def GetAllProjet():
+def GetAllCertif():
     response={}
-    print("papaapap")
     try :
         data =[]
-        all_projet = Projet.query.all()
-        if not all_projet :
-            print('allprojet undifined')
+        all_certif = Certif.query.all()
 
-
-        for projet in all_projet :
-            info_projet ={
-                "name":projet.name,
-                "description":projet.description,
-                "lien":projet.lien,
-                "image_filename":projet.image_filename,
+        for certif in all_certif :
+            info_certif ={
+                "name":certif.name,
+                "description":certif.description,
+                "image_filename":certif.image_filename,
             }
-            data.append(info_projet)
+            data.append(info_certif)
         response["statut"]="success"
         response["info"]=data
-        print("data hoooo",data)
+       
         return response
-    
     except Exception as e :
         response["statut"]="error"
         response["errordescript"]=str(e)
     return response
 
-def SingulProjet(projet_id):
+def SingulCertif(certif_id):
     response={}
     try :
 
-        singul_projet = Projet.query.filter_by(projet_id=projet_id).first()
-        if not singul_projet :
+        singul_certif = Certif.query.filter_by(certif_id=certif_id).first()
+        if not singul_certif :
             response["statut"]="error"
-            response["info"]="projet pas trouver"
+            response["info"]="Certif pas trouver"
             return response
         
-        info_projet={
-            "name":singul_projet.name,
-            "description":singul_projet.description,
-            "lien":singul_projet.lien,
-            "image_filename":singul_projet.image_filename,
+        info_certif={
+            "name":singul_certif.name,
+            "description":singul_certif.description,
+            "image_filename":singul_certif.image_filename,
         }
         response["statut"]="success"
-        response["info"]=info_projet
+        response["info"]=info_certif
         return response
     except Exception as e :
         response["statut"]="error"
@@ -101,16 +90,16 @@ def SingulProjet(projet_id):
     return response   
 
 
-def DeleteProjet():
+def DeleteCertif():
     response={}
     try :
-        projet_id = request.json.get("projet_id")
-        projet = Projet.query.filter_by(projet_id=projet_id).first()
-        if not projet :
+        certif_id = request.json.get("certif_id")
+        certif = Certif.query.filter_by(certif_id=certif_id).first()
+        if not certif :
             response['statut']="error"
-            response["info"]="projet nexiste pas"
+            response["info"]="certif nexiste pas"
             return response
-        db.session.delete(projet)
+        db.session.delete(certif)
         db.session.commit()
         response["statut"]="success"
         response["info"]="suppression reussit"
@@ -121,19 +110,19 @@ def DeleteProjet():
     return response
 
 
-def UpdateProjet():
+def Updatecertif():
     response ={}
     try :
-        projet_id = request.json.get("projet_id")
-        projet_update = Projet.query.filter_by(projet_id=projet_id).first()
-        if not projet_update :
+        certif_id = request.json.get("certif_id")
+        certif_update = Certif.query.filter_by(certif_id=certif_id).first()
+        if not certif_update :
             response["statut"]="error"
-            response["info"]="projet non existant"
+            response["info"]="certif non existant"
             return response
         
-        projet_update.name = request.json.get("name",projet_update.name)
-        projet_update.decription = request.json.get("decription",projet_update.decription)
-        projet_update.lien = request.json.get("lien",projet_update.lien)
+        certif_update.name = request.json.get("name",certif_update.name)
+        certif_update.decription = request.json.get("decription",certif_update.decription)
+      
 
         if 'image_filename' in request.files:
             image_file = request.files['image_filename']
@@ -147,17 +136,16 @@ def UpdateProjet():
             # Enregistrer l'image
             image_filename = save_image(image_file)
 
-        projet_update.image_filename = image_filename or projet_update.image_filename
+        certif_update.image_filename = image_filename or certif_update.image_filename
 
-        info_projet ={
-            "name":projet_update.name,
-            "description":projet_update.description,
-            "lien":projet_update.lien,
-            "image_filename":projet_update.image_filename,
+        info_certif ={
+            "name":certif_update.name,
+            "description":certif_update.description,
+            "image_filename":certif_update.image_filename,
         }
 
         response["statut"]="succes"
-        response["info"]=info_projet
+        response["info"]=info_certif
         return response
     except Exception as e :
         response["statut"]="error"

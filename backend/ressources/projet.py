@@ -16,7 +16,7 @@ class ProjetApi(Resource) :
     
     def get (self,route,projet_id=None):
         if route =="getallprojet":
-            return GetAllProjet
+            return GetAllProjet()
         
         if route == "getsingulprojet" and projet_id is not None:
             return  SingulProjet(projet_id)
