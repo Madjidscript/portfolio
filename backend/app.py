@@ -11,6 +11,8 @@ from ressources.admin import *
 from ressources.contact import *
 from ressources.projet import *
 from ressources.certif import *
+from flask_socketio import SocketIO, emit # type: ignore
+
 
 from flask import send_from_directory
 
@@ -23,6 +25,8 @@ load_dotenv()
 
 
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
+
 CORS(app)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(),'static','uploads')
 
@@ -72,4 +76,6 @@ api.add_resource(CertiftApi, '/api/certif/<string:route>/<string:certif_id>', en
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    socketio.run(app, host='127.0.0.1', port=5000)
+

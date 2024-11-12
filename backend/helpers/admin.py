@@ -1,12 +1,17 @@
 from model.model import *
 from config.db import *
-from flask import request,jsonify
+from flask import Flask,request,jsonify
 from helpers.file import save_image
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity # type: ignore
 import bcrypt
 from dotenv import load_dotenv  # type: ignore
 import os
 from datetime import timedelta
+from flask_socketio import SocketIO, emit # type: ignore
+
+app = Flask(__name__)
+
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 
@@ -212,6 +217,12 @@ def LoginAdmin() :
                response["statut"]="succes"
                response["info"]=admin_info
                return response
+          
+          socketio.emit('admin_login', {
+            "message": f"L'administrateur {admin.firstname} est connecté.",
+            "admin_id": admin.admin_id
+            
+        })
      except Exception as e :
           response["statut"]="error"
           response["erorrDescription"]=str(e)
